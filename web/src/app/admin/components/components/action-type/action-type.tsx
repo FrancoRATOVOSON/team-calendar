@@ -82,7 +82,7 @@ function ActionTypeDelete({name}:ActionTypeType) {
         <DialogHeader>
           <DialogTitle>Confirm delete action category :</DialogTitle>
         </DialogHeader>
-        <div>
+        <div className='text-wrap'>
           {`Are you sure you want to delete the ${name} action category ?`}
         </div>
       </DialogContent>
