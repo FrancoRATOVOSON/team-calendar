@@ -1,0 +1,237 @@
+{
+  "version": "6.0",
+  "nxVersion": "18.2.3",
+  "deps": {
+    "@nx/eslint": "18.2.3",
+    "@nx/vite": "18.2.3",
+    "eslint": "~8.57.0",
+    "nx": "18.2.3"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [
+    {
+      "name": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ],
+  "fileMap": {
+    "projectFileMap": {
+      "api": [
+        {
+          "file": "api/.eslintrc.js",
+          "hash": "7461846271827386206"
+        },
+        {
+          "file": "api/.gitignore",
+          "hash": "12634402967133909834"
+        },
+        {
+          "file": "api/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "api/README.md",
+          "hash": "88028313855074524"
+        },
+        {
+          "file": "api/nest-cli.json",
+          "hash": "789240945379598733"
+        },
+        {
+          "file": "api/package.json",
+          "hash": "10138809586277664075",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core",
+            "npm:@nestjs/platform-express",
+            "npm:reflect-metadata",
+            "npm:rxjs",
+            "npm:@nestjs/cli",
+            "npm:@nestjs/schematics",
+            "npm:@nestjs/testing",
+            "npm:@types/express",
+            "npm:@types/jest",
+            "npm:@types/node",
+            "npm:@types/supertest",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/parser",
+            "npm:eslint",
+            "npm:eslint-config-prettier",
+            "npm:eslint-plugin-prettier",
+            "npm:jest",
+            "npm:prettier",
+            "npm:source-map-support",
+            "npm:supertest",
+            "npm:ts-jest",
+            "npm:ts-loader",
+            "npm:ts-node",
+            "npm:tsconfig-paths",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "api/src/app.controller.spec.ts",
+          "hash": "2727664763654384995"
+        },
+        {
+          "file": "api/src/app.controller.ts",
+          "hash": "4552329938751326480"
+        },
+        {
+          "file": "api/src/app.module.ts",
+          "hash": "11673476679848632172"
+        },
+        {
+          "file": "api/src/app.service.ts",
+          "hash": "16892833931858030153"
+        },
+        {
+          "file": "api/src/main.ts",
+          "hash": "16836780892212170881"
+        },
+        {
+          "file": "api/test/app.e2e-spec.ts",
+          "hash": "15142680097789702029"
+        },
+        {
+          "file": "api/test/jest-e2e.json",
+          "hash": "7570273541430074424"
+        },
+        {
+          "file": "api/tsconfig.build.json",
+          "hash": "276845246908739715"
+        },
+        {
+          "file": "api/tsconfig.json",
+          "hash": "1876265833229380624"
+        }
+      ],
+      "front": [
+        {
+          "file": "front/.eslintrc.cjs",
+          "hash": "18224317155734308275"
+        },
+        {
+          "file": "front/.gitignore",
+          "hash": "13046175384202504187"
+        },
+        {
+          "file": "front/README.md",
+          "hash": "11460966644741158790"
+        },
+        {
+          "file": "front/components.json",
+          "hash": "9382126797706474583"
+        },
+        {
+          "file": "front/index.html",
+          "hash": "4025202329384162906"
+        },
+        {
+          "file": "front/package.json",
+          "hash": "1780319188371502105",
+          "deps": [
+            "npm:@generouted/react-router",
+            "npm:@radix-ui/react-icons",
+            "npm:class-variance-authority",
+            "npm:clsx",
+            "npm:react",
+            "npm:react-dom",
+            "npm:react-router-dom",
+            "npm:tailwind-merge",
+            "npm:tailwindcss-animate",
+            "npm:@types/react",
+            "npm:@types/react-dom",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/parser",
+            "npm:@vitejs/plugin-react",
+            "npm:autoprefixer",
+            "npm:eslint",
+            "npm:eslint-plugin-react-hooks",
+            "npm:eslint-plugin-react-refresh",
+            "npm:postcss",
+            "npm:tailwindcss",
+            "npm:typescript",
+            "npm:vite"
+          ]
+        },
+        {
+          "file": "front/postcss.config.js",
+          "hash": "1121830044826443979"
+        },
+        {
+          "file": "front/public/vite.svg",
+          "hash": "16046085400642193116"
+        },
+        {
+          "file": "front/src/lib/utils.ts",
+          "hash": "7693891966047857635"
+        },
+        {
+          "file": "front/src/main.tsx",
+          "hash": "8438802362653821878"
+        },
+        {
+          "file": "front/src/pages/index.tsx",
+          "hash": "3714054003216183725"
+        },
+        {
+          "file": "front/src/router.ts",
+          "hash": "7402922281934984334"
+        },
+        {
+          "file": "front/src/styles.css",
+          "hash": "3730975293417649933"
+        },
+        {
+          "file": "front/src/vite-env.d.ts",
+          "hash": "12946363841406869089"
+        },
+        {
+          "file": "front/tailwind.config.js",
+          "hash": "4044619708645065576"
+        },
+        {
+          "file": "front/tsconfig.json",
+          "hash": "3139494690698311900"
+        },
+        {
+          "file": "front/tsconfig.node.json",
+          "hash": "4208030242441905014"
+        },
+        {
+          "file": "front/vite.config.ts",
+          "hash": "7927244901162804897"
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".gitattributes",
+        "hash": "13194702717607086212"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "7407384518614031558"
+      },
+      {
+        "file": "nx.json",
+        "hash": "9199972282186614261"
+      },
+      {
+        "file": "package.json",
+        "hash": "12001569914790613252"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "8797320971007033443"
+      },
+      {
+        "file": "pnpm-workspace.yaml",
+        "hash": "10252772279890924747"
+      }
+    ]
+  }
+}

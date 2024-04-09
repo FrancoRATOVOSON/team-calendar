@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  db-team-calendar:
+    container_name: db-team-calendar
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: team_calendar
+    volumes:
+      - ../db-data:/var/lib/mysql
+    networks:
+      - team-calendar-network
+    ports:
+      - "3306:3306"
+
+  #team-calendar-api:
+      # build:
+      #context: .
+      #dockerfile: Dockerfile
+    #container_name: team-calendar-api
+    #restart: always
+        #environment:
+        #DB_HOST: db-team-calendar
+        #DB_USER: root
+        #DB_PASSWORD: root
+        #DB_DATABASE: team_calendar
+      #DB_PORT: 3306
+      #depends_on:
+      #- db-team-calendar
+      #networks:
+      #- team-calendar-network
+      #ports:
+      #- "3000:3000"
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    restart: always
+    environment:
+      PMA_HOST: db-team-calendar
+      PMA_USER: root
+      PMA_PASSWORD: root
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    networks:
+      - team-calendar-network
+
+volumes:
+  db-data:
+networks:
+    team-calendar-network:
+        driver: bridge
