@@ -5,3 +5,10 @@ export type UserType = {
 }
 
 export type UserListType = Array<UserType>
+
+export type ActionTypeType = {
+  id: number
+  name: string
+}
+
+export type ActionTypeListType = Array<ActionTypeType>
