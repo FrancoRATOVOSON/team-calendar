@@ -1,6 +1,18 @@
-import { fakeActionTypeList } from "@/lib/faker";
+import CONFIG from "@/lib/config";
 import { ActionTypeListType } from "@/lib/types";
+import axios from "axios";
 
-export function getActionTypes():Promise<{actions:ActionTypeListType}> {
-  return Promise.resolve({actions: fakeActionTypeList()})
+export async function getActionTypes():Promise<{actions:ActionTypeListType}> {
+  const response = axios.get<ActionTypeListType>(
+    `${CONFIG.base_url}/action`,
+    {
+      headers: {
+        Authorization: `Bearer ${CONFIG.token}`
+      }
+    }
+  ).catch(err => {
+    throw err
+  })
+
+  return {actions: (await response).data}
 }

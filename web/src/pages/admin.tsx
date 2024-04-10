@@ -12,9 +12,14 @@ export const Loader:LoaderFunction = async () => {
 export default function Page() {
   const {users, actions} = useAdminLoaderData()
   return (
-    <Admin
-      actions={actions}
-      users={users}
-    />
+    <div className='min-h-screen w-full p-6 space-y-6'>
+      <h1 className='font-semibold text-4xl'>Admin Page</h1>
+      <div className='space-y-4'>
+      <Admin
+        actions={actions}
+        users={users}
+      />
+      </div>
+    </div>
   )
 }

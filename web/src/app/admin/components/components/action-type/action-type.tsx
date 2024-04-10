@@ -120,7 +120,7 @@ export default function ActionType({id,name,className}:ActionTypeProps) {
       )}
     >
       <ActionTypeEdit id={id} name={name}/>
-      <p>{name}</p>
+      <p className='truncate text-center'>{name}</p>
       <ActionTypeDelete id={id} name={name}/>
     </Card>
   )

@@ -1,6 +1,18 @@
-import { fakeUserList } from "@/lib/faker";
+import CONFIG from "@/lib/config";
 import { UserListType } from "@/lib/types";
+import axios from 'axios'
 
-export function getUsers():Promise<{users:UserListType}> {
-  return Promise.resolve({users: fakeUserList()})
+export async function getUsers():Promise<{users:UserListType}> {
+  const response = await axios.get<UserListType>(
+    `${CONFIG.base_url}/user`,
+    {
+      headers: {
+        Authorization: `Bearer ${CONFIG.token}`
+      }
+    }
+  ).catch(err => {
+    throw err
+  })
+
+  return {users: response.data}
 }
