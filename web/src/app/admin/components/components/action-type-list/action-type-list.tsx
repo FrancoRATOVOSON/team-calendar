@@ -18,11 +18,11 @@ function CreateActionType() {
     <Dialog
       open={open}
       onOpenChange={setopen}
+      defaultOpen={false}
     >
       <DialogTrigger asChild>
         <Button
           variant={'outline'}
-          size={'icon'}
           onClick={() => setopen(true)}
         >
           <PlusIcon className='size-4 mr-2' />
@@ -39,21 +39,21 @@ function CreateActionType() {
             onChange={e => setvalue(e.target.value)}
           />
         </div>
-      </DialogContent>
-      <DialogFooter>
-        <Button
-          onClick={handleConfirm}
-        >
-          Save
-        </Button>
-        <DialogClose asChild>
+        <DialogFooter>
           <Button
-            variant={'outline'}
+            onClick={handleConfirm}
           >
-            Cancel
+            Save
           </Button>
-        </DialogClose>
-      </DialogFooter>
+          <DialogClose asChild>
+            <Button
+              variant={'outline'}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }
@@ -64,14 +64,17 @@ interface ActionTypeListProps {
 
 export default function ActionTypeList({list}:ActionTypeListProps) {
   return (
-    <div>
+    <div className='space-y-4'>
       <CreateActionType/>
-      {list.map(actionType => (
-        <ActionType
-          {...actionType}
-          key={`action-type-${actionType.name}`}
-        />
-      ))}
+      <div className='flex justify-start items-center flex-wrap gap-4'>
+        {list.map(actionType => (
+          <ActionType
+            {...actionType}
+            key={`action-type-${actionType.name}`}
+            className='flex-none w-48 justify-between'
+          />
+        ))}
+      </div>
     </div>
   )
 }

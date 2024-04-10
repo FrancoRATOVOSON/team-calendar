@@ -5,6 +5,7 @@ import { ActionTypeType } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 function ActionTypeEdit({name}:ActionTypeType) {
   const [value,setvalue] = React.useState(name)
@@ -21,7 +22,7 @@ function ActionTypeEdit({name}:ActionTypeType) {
     >
       <DialogTrigger asChild>
         <Button
-          variant={'outline'}
+          variant={'ghost'}
           size={'icon'}
           onClick={() => setopen(true)}
         >
@@ -38,21 +39,21 @@ function ActionTypeEdit({name}:ActionTypeType) {
             onChange={e => setvalue(e.target.value)}
           />
         </div>
-      </DialogContent>
-      <DialogFooter>
-        <Button
-          onClick={handleConfirm}
-        >
-          Save
-        </Button>
-        <DialogClose asChild>
+        <DialogFooter>
           <Button
-            variant={'outline'}
+            onClick={handleConfirm}
           >
-            Cancel
+            Save
           </Button>
-        </DialogClose>
-      </DialogFooter>
+          <DialogClose asChild>
+            <Button
+              variant={'outline'}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }
@@ -71,11 +72,11 @@ function ActionTypeDelete({name}:ActionTypeType) {
     >
       <DialogTrigger asChild>
         <Button
-          variant={'destructive'}
+          variant={'ghost'}
           size={'icon'}
           onClick={() => setopen(true)}
         >
-          <TrashIcon className='size-4'/>
+          <TrashIcon className='size-4 text-destructive'/>
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -85,31 +86,39 @@ function ActionTypeDelete({name}:ActionTypeType) {
         <div className='text-wrap'>
           {`Are you sure you want to delete the ${name} action category ?`}
         </div>
-      </DialogContent>
-      <DialogFooter>
-        <Button
-          variant={'destructive'}
-          onClick={handleConfirm}
-        >
-          Delete
-        </Button>
-        <DialogClose asChild>
+        <DialogFooter>
           <Button
-            variant={'outline'}
+            variant={'destructive'}
+            onClick={handleConfirm}
           >
-            Cancel
+            Delete
           </Button>
-        </DialogClose>
-      </DialogFooter>
+          <DialogClose asChild>
+            <Button
+              variant={'outline'}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }
 
-interface ActionTypeProps extends ActionTypeType {}
+interface ActionTypeProps extends ActionTypeType {
+  className?: string
+}
 
-export default function ActionType({id,name}:ActionTypeProps) {
+export default function ActionType({id,name,className}:ActionTypeProps) {
   return (
-    <Card>
+    <Card
+      className={cn(
+        'flex justify-start items-center',
+        'p-2 gap-2 w-fit',
+        className
+      )}
+    >
       <ActionTypeEdit id={id} name={name}/>
       <p>{name}</p>
       <ActionTypeDelete id={id} name={name}/>
