@@ -12,10 +12,14 @@ export default function useList(list:UserListType) {
   },[list.length, pageSize])
 
   const currentPage = React.useMemo(() => {
-    if (offset[1] >= pageSize) return 1
+    if (offset[1] <= pageSize) return 1
     if(offset[0] === 0) return 1
     return (offset[0] / pageSize) + 1
   },[offset, pageSize])
+
+  console.log(offset)
+  console.log(pageSize)
+  console.log(currentPage)
 
   const handleUserSelect = React.useCallback((selected:boolean,id:number) => {
     const selectedList = new Set(selectedUsers)
@@ -29,13 +33,10 @@ export default function useList(list:UserListType) {
     (size:number) => {
       if(size > 0){
         setPageSize(size)
-        setOffset(state => [
-          size >= list.length ? 0 : state[0],
-          state[0] + size
-        ])
+        setOffset([0,size])
       }
     }
-    ,[list.length]
+    ,[]
   )
 
   const nextPage = React.useCallback(
@@ -56,6 +57,18 @@ export default function useList(list:UserListType) {
     [list.length, offset, pageSize]
   )
 
+  const toggleSelectAll = React.useCallback(
+    () => {
+      if(selectedUsers.size > 0) setSelectedUsers(new Set([]))
+      else {
+        const allUsers:Set<number> = new Set([])
+        list.forEach(user => allUsers.add(user.id))
+        setSelectedUsers(allUsers)
+      }
+    },
+    [list, selectedUsers.size]
+  )
+
   return {
     users: list.slice(offset[0],offset[1]),
     handleUserSelect,
@@ -65,6 +78,7 @@ export default function useList(list:UserListType) {
     pageSize,
     selectedUsers,
     pageCount,
-    currentPage
+    currentPage,
+    toggleSelectAll
   }
 }

@@ -5,6 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { cn } from '@/lib/utils'
 import { UserCard } from '../user-card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface UserListProps {
   list: UserListType
@@ -20,16 +21,14 @@ export default function UserList({list}:UserListProps) {
     pageSize,
     selectedUsers,
     currentPage,
-    pageCount
+    pageCount,
+    toggleSelectAll
   } = useList(list)
 
   return (
     <div className='space-y-4'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-2'>
-          <div>
-            {`${selectedUsers.size} of ${list.length} user(s) selected.`}
-          </div>
           {selectedUsers.size > 0 && (
             <Button
               variant='destructive'
@@ -38,13 +37,15 @@ export default function UserList({list}:UserListProps) {
             </Button>
           )}
         </div>
-        <div>
-          <div>Rows per page</div>
+        <div
+          className='flex justify-end gap-2 items-center'
+        >
+          <div className='text-muted-foreground text-nowrap'>Rows per page</div>
           <Select
             value={`${pageSize}`}
             onValueChange={value => changePageSize(Number(value))}
           >
-            <SelectTrigger>
+            <SelectTrigger className='w-16'>
               <SelectValue placeholder={`${pageSize}`} />
             </SelectTrigger>
             <SelectContent side='bottom'>
@@ -57,7 +58,7 @@ export default function UserList({list}:UserListProps) {
           </Select>
         </div>
       </div>
-      <div>
+      <div className='space-y-4'>
         {users.map(user => (
           <UserCard
             {...user}
@@ -68,27 +69,52 @@ export default function UserList({list}:UserListProps) {
         ))}
       </div>
       <div
-        className={cn(
-          'flex justify-start items-center gap-2'
-        )}
+        className='flex justify-between items-center'
       >
-        <Button
-          onClick={prevPage}
-          disabled={currentPage === 0}
-        >
-          <ChevronLeftIcon className='size-4 mr-2'/>
-          Previous
-        </Button>
-        <div className='text-muted-foreground'>
-          {`Page ${currentPage} of ${pageCount}`}
+        <div className='flex justify-start items-center gap-4'>
+          <div className='flex gap-2 justify-start items-center'>
+            <Checkbox
+              checked={selectedUsers.size > 0}
+              onCheckedChange={toggleSelectAll}
+              id='all-users-selection'
+            />
+            <label
+              className='text-muted-foreground cursor-pointer'
+              htmlFor='all-users-selection'
+            >
+              {selectedUsers.size > 0
+                ? `Unselect all`
+                : `Select all`
+              }
+            </label>
+          </div>
+          <p>{`${selectedUsers.size} of ${list.length} user(s) selected.`}</p>
         </div>
-        <Button
-          onClick={nextPage}
-          disabled={currentPage >= pageCount}
+        <div
+          className={cn(
+            'flex justify-start items-center gap-2'
+          )}
         >
-          Next
-          <ChevronRightIcon className='size-4 ml-2'/>
-        </Button>
+          <Button
+            variant={'outline'}
+            size={'icon'}
+            onClick={prevPage}
+            disabled={currentPage === 0}
+          >
+            <ChevronLeftIcon className='size-4'/>
+          </Button>
+          <div className='text-muted-foreground'>
+            {`Page ${currentPage} of ${pageCount}`}
+          </div>
+          <Button
+            variant={'outline'}
+            size={'icon'}
+            onClick={nextPage}
+            disabled={currentPage >= pageCount}
+          >
+            <ChevronRightIcon className='size-4'/>
+          </Button>
+        </div>
       </div>
     </div>
   )
