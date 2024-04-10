@@ -6,14 +6,29 @@ import { Button } from '@/components/ui/button'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import axios from 'axios'
+import CONFIG from '@/lib/config'
 
-function ActionTypeEdit({name}:ActionTypeType) {
+function ActionTypeEdit({name,id}:ActionTypeType) {
   const [value,setvalue] = React.useState(name)
   const [open,setopen] = React.useState(false)
 
   const handleConfirm = React.useCallback(() => {
-    setopen(false)
-  },[])
+    axios.patch(
+      `${CONFIG.base_url}/action`,
+      {
+        name: value
+      },
+      {
+        params: id,
+        headers: {
+          Authorization: CONFIG.Authorization
+        }
+      }
+    ).then(() => setopen(false)).catch(err => {
+      throw err
+    })
+  },[id, value])
 
   return (
     <Dialog
@@ -58,12 +73,20 @@ function ActionTypeEdit({name}:ActionTypeType) {
   )
 }
 
-function ActionTypeDelete({name}:ActionTypeType) {
+function ActionTypeDelete({name,id}:ActionTypeType) {
   const [open,setopen] = React.useState(false)
 
   const handleConfirm = React.useCallback(() => {
-    setopen(false)
-  },[])
+    axios.delete(
+      `${CONFIG.base_url}/action/`,
+      {
+        params: { id },
+        headers: {
+          Authorization: CONFIG.Authorization
+        }
+      }
+    ).then(() => setopen(false)).catch(err => {throw err})
+  },[id])
 
   return (
     <Dialog

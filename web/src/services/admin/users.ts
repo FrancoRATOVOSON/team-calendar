@@ -7,7 +7,7 @@ export async function getUsers():Promise<{users:UserListType}> {
     `${CONFIG.base_url}/user`,
     {
       headers: {
-        Authorization: `Bearer ${CONFIG.token}`
+        Authorization: CONFIG.Authorization
       }
     }
   ).catch(err => {

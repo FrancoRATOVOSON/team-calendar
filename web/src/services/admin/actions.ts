@@ -7,7 +7,7 @@ export async function getActionTypes():Promise<{actions:ActionTypeListType}> {
     `${CONFIG.base_url}/action`,
     {
       headers: {
-        Authorization: `Bearer ${CONFIG.token}`
+        Authorization: CONFIG.Authorization
       }
     }
   ).catch(err => {

@@ -8,15 +8,29 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import axios from 'axios'
+import CONFIG from '@/lib/config'
 
-function EditUser({name, email}:UserType) {
+function EditUser({name, email,id}:UserType) {
   const [userName,setUserName] = React.useState(name)
   const [userMail,setUserMail] = React.useState(email)
   const [open,setopen] = React.useState(false)
 
   const handleConfirm = React.useCallback(() => {
-    setopen(false)
-  },[])
+    axios.patch(
+      `${CONFIG.base_url}/user/`,
+      {
+        name: userName !== name && userName.length > 0 ? userName : undefined,
+        email: userMail !== email && userMail.length > 0 ? userMail : undefined
+      },
+      {
+        params: { id },
+        headers: {
+          Authorization: CONFIG.Authorization
+        }
+      }
+    ).then(() => setopen(false))
+  },[email, id, name, userMail, userName])
 
   return (
     <Dialog
@@ -71,12 +85,20 @@ function EditUser({name, email}:UserType) {
   )
 }
 
-function DeleteUser({name, email}:UserType) {
+function DeleteUser({name, email, id}:UserType) {
   const [open,setopen] = React.useState(false)
 
   const handleConfirm = React.useCallback(() => {
-    setopen(false)
-  },[])
+    axios.delete(
+      `${CONFIG.base_url}/user/`,
+      {
+        params: { id },
+        headers: {
+          Authorization: CONFIG.Authorization
+        }
+      }
+    ).then(() => setopen(false)).catch(err => {throw err})
+  },[id])
 
   return (
     <Dialog
