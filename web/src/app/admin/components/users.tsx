@@ -1,6 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { UserListType } from '@/lib/types'
+import { UserList } from './components'
 
-export default function Users() {
+interface UsersProps {
+  users: UserListType
+}
+
+export default function Users({users}:UsersProps) {
   return (
     <Card>
       <CardHeader>
@@ -12,7 +18,7 @@ export default function Users() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        
+        <UserList list={users} />
       </CardContent>
     </Card>
   )
