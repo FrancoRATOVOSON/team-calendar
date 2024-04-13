@@ -22,11 +22,13 @@ const localizer = dateFnsLocalizer({
 
 export default function UserPage() {
   return (
-    <div className='w-full h-full'>
-      <Calendar
-        localizer={localizer}
-        className='w-full h-full'
-      />
+    <div className='h-screen'>
+      <div className='w-full h-full'>
+        <Calendar
+          localizer={localizer}
+          // className='w-full h-full'
+        />
+      </div>
     </div>
   )
 }
