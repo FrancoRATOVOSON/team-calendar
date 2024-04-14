@@ -1,6 +1,6 @@
 import useList from "./useList";
 import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { UserCard } from "../user-card";
 import {
@@ -21,6 +21,8 @@ export default function UserList() {
     users,
     handleUserSelect,
     changePageSize,
+    firstPage,
+    lastPage,
     nextPage,
     prevPage,
     pageSize,
@@ -110,6 +112,14 @@ export default function UserList() {
           <Button
             variant={"outline"}
             size={"icon"}
+            onClick={firstPage}
+            disabled={currentPage === 0}
+          >
+            <DoubleArrowLeftIcon className="size-4" />
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"icon"}
             onClick={prevPage}
             disabled={currentPage === 0}
           >
@@ -125,6 +135,14 @@ export default function UserList() {
             disabled={currentPage >= pageCount}
           >
             <ChevronRightIcon className="size-4" />
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={lastPage}
+            disabled={currentPage >= pageCount}
+          >
+            <DoubleArrowRightIcon className="size-4" />
           </Button>
         </div>
       </div>

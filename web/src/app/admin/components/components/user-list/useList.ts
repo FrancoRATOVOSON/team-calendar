@@ -46,11 +46,31 @@ export default function useList(list:UserListType) {
   const prevPage = React.useCallback(
     () => {
       if(pageSize < list.length) {
-        if(offset[0] - pageSize >= 0) setOffset(state => [state[0] - pageSize, state[1] - pageSize])
+        if(offset[0] - pageSize >= 0) {
+          const newTopOffset = offset[0] - pageSize
+          setOffset([newTopOffset, newTopOffset + pageSize])
+        }
         else setOffset([0, pageSize])
       }
     },
     [list.length, offset, pageSize]
+  )
+
+  const lastPage = React.useCallback(
+    () => {
+      if(pageSize < list.length) {
+        const lastPageFirstElement = pageSize * (pageCount - 1)
+        setOffset([lastPageFirstElement, list.length])
+      }
+    },
+    [list.length, pageCount, pageSize]
+  )
+
+  const firstPage = React.useCallback(
+    () => {
+      setOffset([0,pageSize])
+    },
+    [pageSize]
   )
 
   const toggleSelectAll = React.useCallback(
@@ -75,6 +95,8 @@ export default function useList(list:UserListType) {
     selectedUsers,
     pageCount,
     currentPage,
-    toggleSelectAll
+    toggleSelectAll,
+    lastPage,
+    firstPage
   }
 }
