@@ -119,7 +119,7 @@ export default function UserList() {
     currentPage,
     pageCount,
     toggleSelectAll
-  } = useList(data?.users || []);
+  } = useList(data || []);
   const { pending, handleAction } = useActionData({
     actionFn: deleteUsers,
     onSucceed: () => {
@@ -220,7 +220,7 @@ export default function UserList() {
             </label>
           </div>
           {data && (
-            <p>{`${selectedUsers.size} of ${data.users.length} user(s) selected.`}</p>
+            <p>{`${selectedUsers.size} of ${data.length} user(s) selected.`}</p>
           )}
         </div>
         <div className={cn("flex justify-start items-center gap-2")}>

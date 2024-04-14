@@ -78,7 +78,7 @@ export default function ActionTypeList() {
       <CreateActionType onCreated={reloadData} />
       <div className="flex justify-start items-center flex-wrap gap-4">
         {!loading && data ? (
-          data.actions.map((actionType) => (
+          data.map((actionType) => (
             <ActionType
               {...actionType}
               key={`action-type-${actionType.name}`}

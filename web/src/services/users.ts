@@ -1,12 +1,12 @@
 import { UserEditInput, UserInput, UserListType } from "@/lib/types";
 import { api } from "@/lib/utils";
 
-export async function getUsers(): Promise<{ users: UserListType }> {
-  const response = await api.get<UserListType>(`/user`).catch((err) => {
+export async function getUsers(): Promise<UserListType> {
+  const response = await api.get<{ users: UserListType }>(`/user`).catch((err) => {
     throw err;
   });
 
-  return { users: response.data };
+  return response.data.users
 }
 
 export function createUser(data: UserInput) {

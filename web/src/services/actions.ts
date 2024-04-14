@@ -2,7 +2,10 @@ import { ActionTypeListType } from "@/lib/types";
 import { api } from "@/lib/utils";
 
 export async function getActionTypes():Promise<ActionTypeListType> {
-  const response = await api.get<{actions:ActionTypeListType}>('/action')
+  const response = await api.get<{actions:ActionTypeListType}>('/action').catch((err) => {
+    throw err;
+  });
+
   return response.data.actions
 }
 

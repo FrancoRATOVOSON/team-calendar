@@ -12,12 +12,12 @@ export const handlers: Array<RequestHandler> = [
     setTimeout(() => {
       console.log('Captured a "GET /user" request');
     }, 3500);
-    return HttpResponse.json(fakeUserList());
+    return HttpResponse.json({ users: fakeUserList()});
   }),
 
   http.get(`${CONFIG.base_url}/action`, () => {
     console.log('Captured a "GET /action" request');
-    return HttpResponse.json(fakeActionTypeList());
+    return HttpResponse.json({ actions: fakeActionTypeList()});
   }),
 
   http.post(`${CONFIG.base_url}/type-action`, () => {
