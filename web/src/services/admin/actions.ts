@@ -3,7 +3,7 @@ import { ActionTypeListType } from "@/lib/types";
 import axios from "axios";
 
 export async function getActionTypes():Promise<{actions:ActionTypeListType}> {
-  const response = axios.get<ActionTypeListType>(
+  const response = await axios.get<ActionTypeListType>(
     `${CONFIG.base_url}/action`,
     {
       headers: {
@@ -14,5 +14,7 @@ export async function getActionTypes():Promise<{actions:ActionTypeListType}> {
     throw err
   })
 
-  return {actions: (await response).data}
+  console.log(response.data)
+
+  return {actions: response.data}
 }

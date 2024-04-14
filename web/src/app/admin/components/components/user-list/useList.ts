@@ -17,10 +17,6 @@ export default function useList(list:UserListType) {
     return (offset[0] / pageSize) + 1
   },[offset, pageSize])
 
-  console.log(offset)
-  console.log(pageSize)
-  console.log(currentPage)
-
   const handleUserSelect = React.useCallback((selected:boolean,id:number) => {
     const selectedList = new Set(selectedUsers)
     if(selected)

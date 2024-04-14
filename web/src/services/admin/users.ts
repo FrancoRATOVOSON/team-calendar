@@ -14,5 +14,7 @@ export async function getUsers():Promise<{users:UserListType}> {
     throw err
   })
 
+  console.log(response.data)
+
   return {users: response.data}
 }
