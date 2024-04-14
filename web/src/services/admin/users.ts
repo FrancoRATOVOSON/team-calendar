@@ -1,4 +1,4 @@
-import { UserListType } from "@/lib/types";
+import { UserInput, UserListType } from "@/lib/types";
 import { api } from "@/lib/utils";
 
 export async function getUsers():Promise<{users:UserListType}> {
@@ -7,4 +7,11 @@ export async function getUsers():Promise<{users:UserListType}> {
   })
 
   return {users: response.data}
+}
+
+export function createUser(data:UserInput) {
+  return api.post(
+    '/user',
+    data
+  )
 }

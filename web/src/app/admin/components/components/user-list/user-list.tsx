@@ -1,6 +1,12 @@
+import * as React from "react";
 import useList from "./useList";
 import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from "@radix-ui/react-icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon
+} from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { UserCard } from "../user-card";
 import {
@@ -11,12 +17,95 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useLoadData } from "@/lib/hooks";
-import { getUsers } from "@/services/admin";
-import { AlertMessage } from "@/components/common";
+import { useActionData, useLoadData } from "@/lib/hooks";
+import { createUser, getUsers } from "@/services/admin";
+import { ActionButton, AlertMessage } from "@/components/common";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+interface CreateUserProps {
+  onCreated?: () => void;
+}
+
+function CreateUser({ onCreated }: CreateUserProps) {
+  const [name, setname] = React.useState("");
+  const [email, setemail] = React.useState("");
+  const [password, setpassword] = React.useState("");
+  const [open, setopen] = React.useState(false);
+  const { pending, handleAction } = useActionData({
+    actionFn: createUser,
+    onSucceed: () => {
+      toast("Action type has been created");
+      onCreated?.();
+    },
+    onError: () => toast("Error when creating Action type"),
+    onFinally: () => setopen(false)
+  });
+
+  const handleConfirm = React.useCallback(() => {
+    handleAction({ name, email, password });
+  }, [handleAction, name, email, password]);
+
+  return (
+    <Dialog open={open} onOpenChange={setopen} defaultOpen={false}>
+      <DialogTrigger asChild>
+        <Button variant={"outline"} onClick={() => setopen(true)}>
+          <PlusIcon className="size-4 mr-2" />
+          Create User
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>New action category name :</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <Label>Name</Label>
+            <Input value={name} onChange={(e) => setname(e.target.value)} />
+          </div>
+          <div className="space-y-1">
+            <Label>Email</Label>
+            <Input value={email} onChange={(e) => setemail(e.target.value)} />
+          </div>
+          <div className="space-y-1">
+            <Label>Password</Label>
+            <Input
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
+              type="password"
+            />
+          </div>
+        </div>
+        <DialogFooter className="mt-4">
+          <ActionButton
+            onClick={handleConfirm}
+            pending={pending}
+            label={(isPending) => (isPending ? `Saving...` : `Save`)}
+          />
+          <DialogClose asChild>
+            <Button variant={"outline"} disabled={pending}>
+              Cancel
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export default function UserList() {
-  const { data, error, loading } = useLoadData(getUsers);
+  const { data, error, loading, reloadData } = useLoadData(getUsers);
   const {
     users,
     handleUserSelect,
@@ -51,7 +140,8 @@ export default function UserList() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <div className="flex justify-start items-center gap-2">
+          <CreateUser onCreated={reloadData} />
           {selectedUsers.size > 0 && (
             <Button variant="destructive">Delete selected users</Button>
           )}
@@ -106,7 +196,9 @@ export default function UserList() {
               {selectedUsers.size > 0 ? `Unselect all` : `Select all`}
             </label>
           </div>
-          {data && <p>{`${selectedUsers.size} of ${data.users.length} user(s) selected.`}</p>}
+          {data && (
+            <p>{`${selectedUsers.size} of ${data.users.length} user(s) selected.`}</p>
+          )}
         </div>
         <div className={cn("flex justify-start items-center gap-2")}>
           <Button

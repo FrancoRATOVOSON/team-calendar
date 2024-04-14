@@ -28,10 +28,10 @@ function CreateActionType({ onCreated }: CreateActionTypeProps) {
   const { pending, handleAction } = useActionData({
     actionFn: createActionType,
     onSucceed: () => {
-      toast("Action type has been created");
+      toast("User has been created");
       onCreated?.()
     },
-    onError: () => toast("Error when creating Action type"),
+    onError: () => toast("Error when creating user"),
     onFinally: () => setopen(false)
   })
 
