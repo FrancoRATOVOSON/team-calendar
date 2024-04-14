@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useActionData, useLoadData } from "@/lib/hooks";
-import { createUser, getUsers } from "@/services/admin";
+import { createUser, deleteUsers, getUsers } from "@/services/admin";
 import { ActionButton, AlertMessage } from "@/components/common";
 import {
   Dialog,
@@ -120,6 +120,20 @@ export default function UserList() {
     pageCount,
     toggleSelectAll
   } = useList(data?.users || []);
+  const {pending,handleAction} = useActionData({
+    actionFn: deleteUsers,
+    onSucceed: () => {
+      toast(`${selectedUsers.size} users deleted!`)
+      reloadData()
+      toggleSelectAll(false)
+    },
+    onError: () => toast('An error occured when deleting multiple users')
+  })
+
+  const handleDeleteUsers = React.useCallback(
+    () => handleAction(Array.from(selectedUsers)),
+    [handleAction, selectedUsers]
+  )
 
   const loader = (
     <AlertMessage
@@ -143,7 +157,12 @@ export default function UserList() {
         <div className="flex justify-start items-center gap-2">
           <CreateUser onCreated={reloadData} />
           {selectedUsers.size > 0 && (
-            <Button variant="destructive">Delete selected users</Button>
+            <ActionButton
+              variant="destructive"
+              pending={pending}
+              label={isPending => isPending ? `Deleting...` : 'Delete selected users'}
+              onClick={handleDeleteUsers}
+            />
           )}
         </div>
         <div className="flex justify-end gap-2 items-center">
@@ -186,7 +205,7 @@ export default function UserList() {
           <div className="flex gap-2 justify-start items-center">
             <Checkbox
               checked={selectedUsers.size > 0}
-              onCheckedChange={toggleSelectAll}
+              onCheckedChange={() => toggleSelectAll()}
               id="all-users-selection"
             />
             <label

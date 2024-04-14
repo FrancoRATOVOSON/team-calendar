@@ -9,7 +9,9 @@ const emptyResponse = new HttpResponse(null, {
 
 export const handlers: Array<RequestHandler> = [
   http.get(`${CONFIG.base_url}/user`, () => {
-    console.log('Captured a "GET /user" request');
+    setTimeout(() => {
+      console.log('Captured a "GET /user" request');
+    },3500)
     return HttpResponse.json(fakeUserList());
   }),
 
@@ -34,5 +36,10 @@ export const handlers: Array<RequestHandler> = [
 
   http.post(`${CONFIG.base_url}/user`, () => {
     return emptyResponse;
+  }),
+
+  http.delete(`${CONFIG.base_url}/users`, ({request}) => {
+    console.log(request.url)
+    return emptyResponse
   })
 ];
