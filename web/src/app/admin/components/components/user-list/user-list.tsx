@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useActionData, useLoadData } from "@/lib/hooks";
-import { createUser, deleteUsers, getUsers } from "@/services/admin";
+import { createUser, deleteUsers, getUsers } from "@/services";
 import { ActionButton, AlertMessage } from "@/components/common";
 import {
   Dialog,

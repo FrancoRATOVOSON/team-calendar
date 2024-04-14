@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { PlusIcon } from "@radix-ui/react-icons";
 import ActionType from "../action-type/action-type";
-import { createActionType, getActionTypes } from "@/services/admin";
+import { createActionType, getActionTypes } from "@/services";
 import { toast } from "sonner";
 import { useActionData, useLoadData } from "@/lib/hooks";
 import { AlertMessage } from "@/components/common";

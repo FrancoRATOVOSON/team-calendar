@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useActionData } from "@/lib/hooks";
-import { deleteUser, editUser } from "@/services/admin";
+import { deleteUser, editUser } from "@/services";
 import { toast } from "sonner";
 import { ActionButton } from "@/components/common";
 

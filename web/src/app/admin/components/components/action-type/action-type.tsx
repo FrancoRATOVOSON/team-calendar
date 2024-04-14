@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { deleteActionType, editActionType } from '@/services/admin'
+import { deleteActionType, editActionType } from '@/services'
 import { toast } from 'sonner'
 import { ActionButton } from '@/components/common'
 
