@@ -21,11 +21,19 @@ export const handlers:Array<RequestHandler> = [
     })
   }),
 
-  http.patch(`${CONFIG.base_url}/action`, ({params}) => {
+  http.patch(`${CONFIG.base_url}/action/:id`, ({params}) => {
     console.log(`Patching ${params.id}`)
     return new HttpResponse(null, {
       status: 201,
       statusText: 'updated'
+    })
+  }),
+
+  http.delete(`${CONFIG.base_url}/action/:id`, ({params}) => {
+    console.log(`Deleting ${params.id}`)
+    return new HttpResponse(null, {
+      status: 201,
+      statusText: 'deleted'
     })
   }),
 ]

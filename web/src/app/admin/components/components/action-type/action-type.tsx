@@ -6,11 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import axios from 'axios'
-import CONFIG from '@/lib/config'
-import { editActionType } from '@/services/admin'
+import { deleteActionType, editActionType } from '@/services/admin'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
+import { ActionButton } from '@/components/common'
 
 interface ActionTypeEditProps extends ActionTypeType {
   onValidate?: (id:number,name:string) => void
@@ -29,8 +28,8 @@ function ActionTypeEdit({name,id,onValidate}:ActionTypeEditProps) {
     }).catch(() => {
       toast('Error when updating action type!', {className: 'text-destructive'})
     }).finally(() => {
-      setPending(false)
       setopen(false)
+      setPending(false)
     })
   },[id, value, onValidate])
 
@@ -79,20 +78,26 @@ function ActionTypeEdit({name,id,onValidate}:ActionTypeEditProps) {
   )
 }
 
-function ActionTypeDelete({name,id}:ActionTypeType) {
+interface ActionTypeDeleteProps extends ActionTypeType {
+  onValidate?: (id:number) => void
+}
+
+function ActionTypeDelete({name,id,onValidate}:ActionTypeDeleteProps) {
   const [open,setopen] = React.useState(false)
+  const [pending, setPending] = React.useState(false);
 
   const handleConfirm = React.useCallback(() => {
-    axios.delete(
-      `${CONFIG.base_url}/action/`,
-      {
-        params: { id },
-        headers: {
-          Authorization: CONFIG.Authorization
-        }
-      }
-    ).then(() => setopen(false)).catch(err => {throw err})
-  },[id])
+    setPending(true)
+    deleteActionType(id).then(() => {
+      toast('Action type deleted.')
+      onValidate?.(id)
+    }).catch(() => {
+      toast('Error when deleting your action')
+    }).finally(() => {
+      setopen(false)
+      setPending(false)
+    })
+  },[id, onValidate])
 
   return (
     <Dialog
@@ -116,12 +121,12 @@ function ActionTypeDelete({name,id}:ActionTypeType) {
           {`Are you sure you want to delete the ${name} action category ?`}
         </div>
         <DialogFooter>
-          <Button
+          <ActionButton
             variant={'destructive'}
             onClick={handleConfirm}
-          >
-            Delete
-          </Button>
+            pending={pending}
+            label={isPending => isPending ? 'Deleting...' : 'Delete'}
+          />
           <DialogClose asChild>
             <Button
               variant={'outline'}
@@ -155,7 +160,7 @@ export default function ActionType({
     >
       <ActionTypeEdit id={id} name={name} onValidate={onActionEdited}/>
       <p className='truncate text-center'>{name}</p>
-      <ActionTypeDelete id={id} name={name}/>
+      <ActionTypeDelete id={id} name={name} onValidate={onActionDeleted}/>
     </Card>
   )
 }

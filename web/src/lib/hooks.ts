@@ -29,3 +29,32 @@ export function useLoadData<T>(
 
   return { loading, error, data, reloadData }
 }
+
+type UseActionDataParams<T> = {
+  actionFn: (...params:unknown[]) => Promise<T>
+  onSucceed: (params?: T) => void
+  onError?: (err:unknown) => void
+  onFinally?: () => void
+}
+
+export function useActionData<T>({
+  actionFn,onSucceed,onError,onFinally
+}:UseActionDataParams<T>) {
+  const [pending,setPending] = React.useState(false)
+
+  const handleAction = React.useCallback(
+    (...params:Parameters<typeof actionFn>) => {
+      setPending(true)
+      actionFn(...params).then((value) => {
+        onSucceed(value)
+      }).catch(err => {
+        onError?.(err)
+      }).finally(() => {
+        onFinally?.()
+        setPending(false)
+      })
+    },[actionFn, onError, onFinally, onSucceed]
+  )
+
+  return { pending, handleAction }
+}

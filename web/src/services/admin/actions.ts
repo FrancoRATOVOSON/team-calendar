@@ -14,11 +14,9 @@ export async function createActionType(actionTypeName:string) {
 }
 
 export async function editActionType(id:number,name:string) {
-  return api.patch(
-    '/action',
-    {name},
-    {
-      params: { id }
-    }
-  )
+  return api.patch('/action/'+id,{name})
+}
+
+export async function deleteActionType(id:number) {
+  return api.delete('/action/'+id)
 }
