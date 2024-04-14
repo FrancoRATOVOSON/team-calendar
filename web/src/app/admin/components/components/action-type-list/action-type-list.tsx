@@ -111,6 +111,8 @@ export default function ActionTypeList() {
               {...actionType}
               key={`action-type-${actionType.name}`}
               className="flex-none w-48 justify-between"
+              onActionEdited={reloadData}
+              onActionDeleted={reloadData}
             />
           ))
         ) : (

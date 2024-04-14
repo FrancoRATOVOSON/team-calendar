@@ -16,8 +16,16 @@ export const handlers:Array<RequestHandler> = [
   http.post(`${CONFIG.base_url}/type-action`, ({request}) => {
     console.log(request.body)
     return new HttpResponse(null, {
-      status: 200,
+      status: 201,
       statusText: 'created'
     })
-  })
+  }),
+
+  http.patch(`${CONFIG.base_url}/action`, ({params}) => {
+    console.log(`Patching ${params.id}`)
+    return new HttpResponse(null, {
+      status: 201,
+      statusText: 'updated'
+    })
+  }),
 ]

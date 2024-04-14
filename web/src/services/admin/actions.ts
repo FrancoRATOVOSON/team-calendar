@@ -12,3 +12,13 @@ export async function getActionTypes():Promise<{actions:ActionTypeListType}> {
 export async function createActionType(actionTypeName:string) {
   return api.post('/type-action',{name: actionTypeName})
 }
+
+export async function editActionType(id:number,name:string) {
+  return api.patch(
+    '/action',
+    {name},
+    {
+      params: { id }
+    }
+  )
+}

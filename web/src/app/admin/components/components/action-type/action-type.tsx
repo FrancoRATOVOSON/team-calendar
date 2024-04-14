@@ -8,31 +8,31 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import axios from 'axios'
 import CONFIG from '@/lib/config'
+import { editActionType } from '@/services/admin'
+import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
 
 interface ActionTypeEditProps extends ActionTypeType {
-  onValidate?: (id:number,name:string)
+  onValidate?: (id:number,name:string) => void
 }
 
 function ActionTypeEdit({name,id,onValidate}:ActionTypeEditProps) {
   const [value,setvalue] = React.useState(name)
+  const [pending, setPending] = React.useState(false);
   const [open,setopen] = React.useState(false)
 
   const handleConfirm = React.useCallback(() => {
-    axios.patch(
-      `${CONFIG.base_url}/action`,
-      {
-        name: value
-      },
-      {
-        params: id,
-        headers: {
-          Authorization: CONFIG.Authorization
-        }
-      }
-    ).then(() => setopen(false)).catch(err => {
-      throw err
+    setPending(true)
+    editActionType(id,value).then(() => {
+      toast('Action edited')
+      onValidate?.(id,value)
+    }).catch(() => {
+      toast('Error when updating action type!', {className: 'text-destructive'})
+    }).finally(() => {
+      setPending(false)
+      setopen(false)
     })
-  },[id, value])
+  },[id, value, onValidate])
 
   return (
     <Dialog
@@ -61,8 +61,10 @@ function ActionTypeEdit({name,id,onValidate}:ActionTypeEditProps) {
         <DialogFooter>
           <Button
             onClick={handleConfirm}
+            disabled={pending}
           >
-            Save
+            {pending && <Loader className='size-4 animate-spin' />}
+            {pending ? 'Saving...' : 'Save'}
           </Button>
           <DialogClose asChild>
             <Button
@@ -151,7 +153,7 @@ export default function ActionType({
         className
       )}
     >
-      <ActionTypeEdit id={id} name={name}/>
+      <ActionTypeEdit id={id} name={name} onValidate={onActionEdited}/>
       <p className='truncate text-center'>{name}</p>
       <ActionTypeDelete id={id} name={name}/>
     </Card>
