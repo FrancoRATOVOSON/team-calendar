@@ -15,38 +15,8 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import ActionType from "../action-type/action-type";
 import { createActionType, getActionTypes } from "@/services/admin";
 import { toast } from "sonner";
-import { useLoadData } from "@/lib/hooks";
+import { useActionData, useLoadData } from "@/lib/hooks";
 import { AlertMessage } from "@/components/common";
-
-type CreateActionTypeParams = {
-  onSuccess: () => void;
-  onError: () => void;
-};
-
-function useCreateActionType({ onSuccess, onError }: CreateActionTypeParams) {
-  const [pending, setPending] = React.useState(false);
-
-  const handleCreateActionType = React.useCallback(
-    (name: string) => {
-      setPending(true);
-      createActionType(name)
-        .then(() => {
-          onSuccess();
-          toast("Action type has been created");
-        })
-        .catch(() => {
-          onError();
-          toast("Error when creating Action type");
-        })
-        .finally(() => {
-          setPending(false);
-        });
-    },
-    [onError, onSuccess]
-  );
-
-  return { pending, handleCreateActionType };
-}
 
 interface CreateActionTypeProps {
   onCreated?: () => void;
@@ -55,17 +25,19 @@ interface CreateActionTypeProps {
 function CreateActionType({ onCreated }: CreateActionTypeProps) {
   const [value, setvalue] = React.useState("");
   const [open, setopen] = React.useState(false);
-  const { pending, handleCreateActionType } = useCreateActionType({
-    onSuccess: () => {
-      setopen(false);
-      onCreated?.();
+  const { pending, handleAction } = useActionData({
+    actionFn: createActionType,
+    onSucceed: () => {
+      toast("Action type has been created");
+      onCreated?.()
     },
-    onError: () => setopen(false)
-  });
+    onError: () => toast("Error when creating Action type"),
+    onFinally: () => setopen(false)
+  })
 
   const handleConfirm = React.useCallback(() => {
-    handleCreateActionType(value);
-  }, [handleCreateActionType, value]);
+    handleAction(value)
+  }, [handleAction, value]);
 
   return (
     <Dialog open={open} onOpenChange={setopen} defaultOpen={false}>

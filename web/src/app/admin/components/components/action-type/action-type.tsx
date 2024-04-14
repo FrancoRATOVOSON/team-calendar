@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { deleteActionType, editActionType } from '@/services/admin'
 import { toast } from 'sonner'
-import { Loader } from 'lucide-react'
 import { ActionButton } from '@/components/common'
 
 interface ActionTypeEditProps extends ActionTypeType {
@@ -58,13 +57,11 @@ function ActionTypeEdit({name,id,onValidate}:ActionTypeEditProps) {
           />
         </div>
         <DialogFooter>
-          <Button
+          <ActionButton
             onClick={handleConfirm}
-            disabled={pending}
-          >
-            {pending && <Loader className='size-4 animate-spin' />}
-            {pending ? 'Saving...' : 'Save'}
-          </Button>
+            pending={pending}
+            label={isPending => isPending ? `Saving...` : 'Save'}
+          />
           <DialogClose asChild>
             <Button
               variant={'outline'}

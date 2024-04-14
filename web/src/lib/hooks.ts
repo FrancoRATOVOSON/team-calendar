@@ -30,16 +30,16 @@ export function useLoadData<T>(
   return { loading, error, data, reloadData }
 }
 
-type UseActionDataParams<T> = {
-  actionFn: (...params:unknown[]) => Promise<T>
+type UseActionDataParams<T,U> = {
+  actionFn: (params:U) => Promise<T>
   onSucceed: (params?: T) => void
   onError?: (err:unknown) => void
   onFinally?: () => void
 }
 
-export function useActionData<T>({
+export function useActionData<T,U>({
   actionFn,onSucceed,onError,onFinally
-}:UseActionDataParams<T>) {
+}:UseActionDataParams<T,U>) {
   const [pending,setPending] = React.useState(false)
 
   const handleAction = React.useCallback(
