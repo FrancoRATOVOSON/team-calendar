@@ -9,7 +9,11 @@ import { cn } from '@/lib/utils'
 import axios from 'axios'
 import CONFIG from '@/lib/config'
 
-function ActionTypeEdit({name,id}:ActionTypeType) {
+interface ActionTypeEditProps extends ActionTypeType {
+  onValidate?: (id:number,name:string)
+}
+
+function ActionTypeEdit({name,id,onValidate}:ActionTypeEditProps) {
   const [value,setvalue] = React.useState(name)
   const [open,setopen] = React.useState(false)
 
@@ -131,14 +135,19 @@ function ActionTypeDelete({name,id}:ActionTypeType) {
 
 interface ActionTypeProps extends ActionTypeType {
   className?: string
+  onActionEdited?: (id:number,name:string) => void
+  onActionDeleted?: (id:number) => void
 }
 
-export default function ActionType({id,name,className}:ActionTypeProps) {
+export default function ActionType({
+  id,name,className,
+  onActionDeleted,onActionEdited
+}:ActionTypeProps) {
   return (
     <Card
       className={cn(
         'flex justify-start items-center',
-        'p-2 gap-2 w-fit',
+        'p-1 gap-2 w-fit',
         className
       )}
     >

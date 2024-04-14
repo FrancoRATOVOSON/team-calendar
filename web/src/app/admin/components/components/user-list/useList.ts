@@ -8,7 +8,7 @@ export default function useList(list:UserListType) {
 
   const pageCount = React.useMemo(() => {
     if(pageSize >= list.length) return 1
-    return Math.floor(list.length / pageSize)
+    return Math.ceil(list.length / pageSize)
   },[list.length, pageSize])
 
   const currentPage = React.useMemo(() => {

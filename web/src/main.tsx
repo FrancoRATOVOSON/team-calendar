@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import { Routes } from "@generouted/react-router";
 
 import "./styles.css";
+import { Toaster } from "./components/ui/sonner";
 
 async function enableMocking() {
   const { worker } = await import("@/mock/browser");
@@ -10,18 +10,19 @@ async function enableMocking() {
   return worker.start();
 }
 
-function setupReact(Router: () => React.JSX.Element) {
+async function setupReact() {
+  const {Routes} = await import('@generouted/react-router')
+
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-      <Router/>
+      <Routes/>
+      <Toaster/>
     </React.StrictMode>
   );
 }
 
-enableMocking().then( async () => {
-  const {Routes} = await import('@generouted/react-router')
+// Comment this if use a real backend
+enableMocking().then( async () => {setupReact()});
 
-  setupReact(Routes)
-});
-
+// Comment this to enable api mocking
 // setupReact()
