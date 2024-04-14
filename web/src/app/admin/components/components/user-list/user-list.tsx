@@ -120,20 +120,20 @@ export default function UserList() {
     pageCount,
     toggleSelectAll
   } = useList(data?.users || []);
-  const {pending,handleAction} = useActionData({
+  const { pending, handleAction } = useActionData({
     actionFn: deleteUsers,
     onSucceed: () => {
-      toast(`${selectedUsers.size} users deleted!`)
-      reloadData()
-      toggleSelectAll(false)
+      toast(`${selectedUsers.size} users deleted!`);
+      reloadData();
+      toggleSelectAll(false);
     },
-    onError: () => toast('An error occured when deleting multiple users')
-  })
+    onError: () => toast("An error occured when deleting multiple users")
+  });
 
   const handleDeleteUsers = React.useCallback(
     () => handleAction(Array.from(selectedUsers)),
     [handleAction, selectedUsers]
-  )
+  );
 
   const loader = (
     <AlertMessage
@@ -160,7 +160,9 @@ export default function UserList() {
             <ActionButton
               variant="destructive"
               pending={pending}
-              label={isPending => isPending ? `Deleting...` : 'Delete selected users'}
+              label={(isPending) =>
+                isPending ? `Deleting...` : "Delete selected users"
+              }
               onClick={handleDeleteUsers}
             />
           )}
@@ -195,6 +197,8 @@ export default function UserList() {
                 key={user.email}
                 selected={selectedUsers.has(user.id)}
                 onSelectedChange={handleUserSelect}
+                onUserEdited={reloadData}
+                onUserDeleted={reloadData}
               />
             ))}
           </>

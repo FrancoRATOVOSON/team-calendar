@@ -30,16 +30,17 @@ export function useLoadData<T>(
   return { loading, error, data, reloadData }
 }
 
-type UseActionDataParams<T,U> = {
-  actionFn: (params:U) => Promise<T>
+type UseActionDataParams<T> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  actionFn: (...params:any[]) => Promise<T>
   onSucceed: (params?: T) => void
   onError?: (err:unknown) => void
   onFinally?: () => void
 }
 
-export function useActionData<T,U>({
+export function useActionData<T>({
   actionFn,onSucceed,onError,onFinally
-}:UseActionDataParams<T,U>) {
+}:UseActionDataParams<T>) {
   const [pending,setPending] = React.useState(false)
 
   const handleAction = React.useCallback(

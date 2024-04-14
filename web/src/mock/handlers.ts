@@ -11,7 +11,7 @@ export const handlers: Array<RequestHandler> = [
   http.get(`${CONFIG.base_url}/user`, () => {
     setTimeout(() => {
       console.log('Captured a "GET /user" request');
-    },3500)
+    }, 3500);
     return HttpResponse.json(fakeUserList());
   }),
 
@@ -38,8 +38,18 @@ export const handlers: Array<RequestHandler> = [
     return emptyResponse;
   }),
 
-  http.delete(`${CONFIG.base_url}/users`, ({request}) => {
-    console.log(request.url)
-    return emptyResponse
+  http.delete(`${CONFIG.base_url}/users`, ({ request }) => {
+    console.log(request.url);
+    return emptyResponse;
+  }),
+
+  http.patch(`${CONFIG.base_url}/user/:id`, ({ params }) => {
+    console.log(`Updating user ${params.id}`);
+    return emptyResponse;
+  }),
+
+  http.delete(`${CONFIG.base_url}/user/:id`, ({params}) => {
+    console.log(`Deleting user ${params.id}`);
+    return emptyResponse;
   })
 ];

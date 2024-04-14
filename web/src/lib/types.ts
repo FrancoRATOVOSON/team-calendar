@@ -4,6 +4,12 @@ export type UserType = {
   id: number
 }
 
+export type UserEditInput = {
+  name?: string
+  email?: string
+  password?: string
+}
+
 export type UserInput = {
   name: string
   email: string
