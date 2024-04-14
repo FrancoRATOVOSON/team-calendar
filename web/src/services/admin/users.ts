@@ -1,20 +1,10 @@
-import CONFIG from "@/lib/config";
 import { UserListType } from "@/lib/types";
-import axios from 'axios'
+import { api } from "@/lib/utils";
 
 export async function getUsers():Promise<{users:UserListType}> {
-  const response = await axios.get<UserListType>(
-    `${CONFIG.base_url}/user`,
-    {
-      headers: {
-        Authorization: CONFIG.Authorization
-      }
-    }
-  ).catch(err => {
+  const response = await api.get<UserListType>(`/user`).catch(err => {
     throw err
   })
-
-  console.log(response.data)
 
   return {users: response.data}
 }
