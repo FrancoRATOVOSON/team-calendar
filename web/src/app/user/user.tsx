@@ -7,6 +7,8 @@ import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { useLoadData } from '@/lib/hooks'
+import { getUserEvents } from '@/services'
 
 const locales = {
   'be': be,
@@ -21,12 +23,15 @@ const localizer = dateFnsLocalizer({
 })
 
 export default function UserPage() {
+  const {data,loading,error,reloadData} = useLoadData(getUserEvents)
+
   return (
     <div className='h-screen p-6'>
       <div className='w-full h-full'>
         <Calendar
           localizer={localizer}
-          // className='w-full h-full'
+          // components={}
+          events={data}
         />
       </div>
     </div>

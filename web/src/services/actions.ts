@@ -6,7 +6,7 @@ export async function getActionTypes():Promise<ActionTypeListType> {
     throw err;
   });
 
-  return response.data.actions
+  return Promise.resolve(response.data.actions)
 }
 
 export async function createActionType(actionTypeName:string) {

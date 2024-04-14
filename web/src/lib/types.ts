@@ -24,3 +24,20 @@ export type ActionTypeType = {
 }
 
 export type ActionTypeListType = Array<ActionTypeType>
+
+export type EventType = {
+  id: number
+  start: Date
+  end?: Date
+  title: string
+  description: string
+}
+
+export type EventInputType = {
+  title?: string
+  description?: string
+  start?: Date
+  end?: Date
+}
+
+export type EventListType = Array<EventType>

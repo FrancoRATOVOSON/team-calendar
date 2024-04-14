@@ -6,7 +6,7 @@ export async function getUsers(): Promise<UserListType> {
     throw err;
   });
 
-  return response.data.users
+  return Promise.resolve(response.data.users)
 }
 
 export function createUser(data: UserInput) {
