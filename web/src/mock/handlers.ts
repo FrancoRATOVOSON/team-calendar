@@ -1,5 +1,5 @@
 import CONFIG from "@/lib/config";
-import { fakeActionTypeList, fakeUserList } from "@/lib/faker";
+import { fakeActionTypeList, fakeEventList, fakeUserList } from "@/lib/faker";
 import { http, HttpResponse, RequestHandler } from "msw";
 
 const emptyResponse = new HttpResponse(null, {
@@ -18,6 +18,11 @@ export const handlers: Array<RequestHandler> = [
   http.get(`${CONFIG.base_url}/action`, () => {
     console.log('Captured a "GET /action" request');
     return HttpResponse.json({ actions: fakeActionTypeList()});
+  }),
+
+  http.get(`${CONFIG.base_url}/event`, () => {
+    console.log('Captured a "GET /action" request');
+    return HttpResponse.json({ events: fakeEventList()});
   }),
 
   http.post(`${CONFIG.base_url}/type-action`, () => {
@@ -51,5 +56,9 @@ export const handlers: Array<RequestHandler> = [
   http.delete(`${CONFIG.base_url}/user/:id`, ({params}) => {
     console.log(`Deleting user ${params.id}`);
     return emptyResponse;
-  })
+  }),
+
+  http.post(`${CONFIG.base_url}/event`, () => {
+    return emptyResponse;
+  }),
 ];
