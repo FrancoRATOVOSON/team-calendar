@@ -3,13 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DateRangePicker } from "./date-range-picker";
 import { cn } from "@/lib/utils";
-
-type UseEventFormParams = {
-  title?: string;
-  description?: string;
-  start?: Date;
-  end?: Date;
-};
+import { EventInputType } from "@/lib/types";
 
 type EventValuesType = {
   title: {
@@ -33,7 +27,7 @@ type EventValuesType = {
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function useEventForm(params?: UseEventFormParams) {
+export function useEventForm(params?: EventInputType) {
   const [titleState, setTitleState] = React.useState(params?.title || "");
   const [descriptionState, setDescriptionState] = React.useState(
     params?.description || ""

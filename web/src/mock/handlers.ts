@@ -1,5 +1,5 @@
 import CONFIG from "@/lib/config";
-import { fakeActionTypeList, fakeEventList, fakeUserList } from "@/lib/faker";
+import { fakeActionTypeList, fakeEventList, fakeUserEvent, fakeUserList } from "@/lib/faker";
 import { http, HttpResponse, RequestHandler } from "msw";
 
 const emptyResponse = new HttpResponse(null, {
@@ -61,4 +61,9 @@ export const handlers: Array<RequestHandler> = [
   http.post(`${CONFIG.base_url}/event`, () => {
     return emptyResponse;
   }),
+
+  http.get(`${CONFIG.base_url}/user/:id`, ({ params }) => {
+    console.log(`Getting ${params.id}`);
+    return HttpResponse.json(fakeUserEvent())
+  })
 ];

@@ -57,7 +57,7 @@ export function fakeUserEvent():EventType {
 
 export function fakeEventList():EventListType {
   const array:EventListType = []
-  const length = faker.number.int({min: 10, max: 50})
+  const length = faker.number.int({min: 50, max: 500})
 
   for (let index = 0; index <= length; index++) {
     array.push(fakeUserEvent())

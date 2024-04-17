@@ -1,4 +1,4 @@
-import { EventInputType, EventListType } from "@/lib/types";
+import { EventInputType, EventListType, EventType } from "@/lib/types";
 import { api } from "@/lib/utils";
 
 export async function getUserEvents():Promise<EventListType> {
@@ -17,6 +17,14 @@ export async function getUserEvents():Promise<EventListType> {
   )
 }
 
-export function createUserEvent(event:EventInputType) {
+export function createUserEvent(event:Omit<EventType, 'id'>) {
   return api.post('/event', event)
+}
+
+export function updateEvent(id:number,data:EventInputType) {
+  return api.patch(`/event/${id}`,data)
+}
+
+export function deleteEvent(id:number) {
+  return api.delete(`/event/${id}`)
 }
