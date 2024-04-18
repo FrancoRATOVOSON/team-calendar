@@ -33,7 +33,7 @@ export function useLoadData<T>(
 type UseActionDataParams<T> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actionFn: (...params:any[]) => Promise<T>
-  onSucceed: (params?: T) => void
+  onSucceed: (params: T) => void
   onError?: (err:unknown) => void
   onFinally?: () => void
 }

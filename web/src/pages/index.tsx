@@ -1,7 +1,9 @@
-import React from 'react'
+import { LoginForm } from '@/app/login'
 
 export default function Page() {
   return (
-    <div>Home</div>
+    <div className='w-screen h-screen flex justify-center items-center'>
+      <LoginForm/>
+    </div>
   )
 }

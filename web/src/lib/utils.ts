@@ -13,3 +13,7 @@ export const api = axios.create({
     Authorization: CONFIG.Authorization
   }
 })
+
+export const auth = axios.create({
+  baseURL: CONFIG.base_url
+})
