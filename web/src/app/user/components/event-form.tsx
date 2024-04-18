@@ -1,109 +1,191 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { DateRangePicker } from "./date-range-picker";
 import { cn } from "@/lib/utils";
-import { EventInputType } from "@/lib/types";
-
-type EventValuesType = {
-  title: {
-    value: string;
-    onChange: (value: string) => void;
-    id: string;
-  };
-  description: {
-    value: string;
-    onChange: (value: string) => void;
-    id: string;
-  };
-  date: {
-    value: {
-      start: Date;
-      end: Date | undefined;
-    };
-    onChange: (value: { start: Date; end?: Date }) => void;
-    id: string;
-  };
-};
+import { EventInputType, EventType } from "@/lib/types";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { ActionButton } from "@/components/common";
+import { isEqual } from "date-fns";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useEventForm(params?: EventInputType) {
-  const [titleState, setTitleState] = React.useState(params?.title || "");
-  const [descriptionState, setDescriptionState] = React.useState(
-    params?.description || ""
-  );
-  const [startState, setStartState] = React.useState(
-    params?.start || new Date()
-  );
-  const [endState, setEndState] = React.useState<Date | undefined>(params?.end);
+  const [event, setEvent] = React.useState<Omit<EventType, "id">>(() => ({
+    title: "",
+    description: "",
+    start: new Date(),
+    ...params
+  }));
 
   const title = React.useMemo(
     () => ({
-      value: titleState,
-      onChange: (value: string) => setTitleState(value),
+      value: event.title,
+      onChange: (value: string) =>
+        setEvent((state) => ({ ...state, title: value })),
       id: "create-event-title"
     }),
-    [titleState]
+    [event]
   );
 
   const description = React.useMemo(
     () => ({
-      value: descriptionState,
-      onChange: (value: string) => setDescriptionState(value),
+      value: event.description,
+      onChange: (value: string) =>
+        setEvent((state) => ({ ...state, description: value })),
       id: "create-event-description"
     }),
-    [descriptionState]
+    [event]
   );
 
   const date = React.useMemo(
     () => ({
-      value: { start: startState, end: endState },
-      onChange: (value: { start: Date; end?: Date }) => {
-        setStartState(value.start);
-        setEndState(value.end);
-      },
+      value: { start: event.start, end: event.end },
+      onChange: ({ start, end }: { start: Date; end?: Date }) =>
+        setEvent((state) => ({ ...state, start, end })),
       id: "create-event-date"
     }),
-    [startState, endState]
+    [event]
   );
 
   return { title, description, date };
 }
 
+type EventFormType = {
+  title: string;
+  description: string;
+  date: {
+    start: Date;
+    end?: Date;
+  };
+};
+
 interface EventFormProps {
-  values: EventValuesType;
-  className?: string
+  initialValues?: EventType;
+  className?: string;
+  onCreate?: (inputs: Omit<EventType, "id">) => void;
+  onUpdate?: (inputs: EventInputType) => void;
+  onDelete?: (id: number) => void;
+  onCancel?: () => void;
+  pending: boolean;
 }
 
 export function EventForm({
-  values: { title, description, date },className
+  className,
+  initialValues,
+  onCreate,
+  onUpdate,
+  onDelete,
+  onCancel,
+  pending
 }: EventFormProps) {
+  const form = useForm<Omit<EventFormType, "id">>({
+    defaultValues: initialValues
+  });
+
+  const handleCreate = React.useCallback(() => {
+    const { title, description, date } = form.getValues();
+    onCreate?.({ title, description, ...date });
+  }, [form, onCreate]);
+
+  const handleUpdate = React.useCallback(() => {
+    const { title, description, date } = form.getValues();
+    onUpdate?.({
+      title: title === initialValues?.title ? undefined : title,
+      description:
+        description === initialValues?.description ? undefined : description,
+      start:
+        initialValues && isEqual(date.start, initialValues.start)
+          ? undefined
+          : date.start,
+      end:
+        (!initialValues?.end && !date.end) ||
+        (initialValues?.end && date.end && isEqual(initialValues.end, date.end))
+          ? undefined
+          : date.end
+    });
+  }, [form, onUpdate, initialValues]);
+
+  const handleDelete = React.useCallback(() => {
+    if (initialValues && onDelete) onDelete(initialValues.id);
+  }, [onDelete, initialValues]);
+
   return (
-    <div className={cn("space-y-4",className)}>
-      <div className="space-y-1">
-        <Label htmlFor={title.id}>Title</Label>
-        <Input
-          id={title.id}
-          value={title.value}
-          onChange={(e) => title.onChange(e.target.value)}
-        />
-      </div>
-      <div className="space-y-1">
-        <Label htmlFor={description.id}>Description</Label>
-        <Input
-          id={description.id}
-          value={description.value}
-          onChange={(e) => description.onChange(e.target.value)}
-        />
-      </div>
-      <div className="space-y-1">
-        <Label htmlFor={date.id}>Title</Label>
-        <DateRangePicker
-          id={date.id}
-          values={date.value}
-          onChange={date.onChange}
-        />
-      </div>
-    </div>
+    <Form {...form}>
+      <form className={cn("space-y-4", className)}>
+        <div>
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Additionnal note..." {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Starting and ending date</FormLabel>
+                <FormControl>
+                  <DateRangePicker {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
+        <div>
+          {onCreate && (
+            <ActionButton
+              pending={pending}
+              onClick={handleCreate}
+              label={(isPending) => (isPending ? "Creating..." : "Create")}
+            />
+          )}
+          {onUpdate && (
+            <ActionButton
+              label={(isPending) => (isPending ? "Saving..." : "Save")}
+              onClick={handleUpdate}
+              pending={pending}
+            />
+          )}
+          {onDelete && (
+            <ActionButton
+              label={(isPending) => (isPending ? "Deleting..." : "Delete")}
+              variant="destructive"
+              onClick={handleDelete}
+              pending={pending}
+            />
+          )}
+          <Button variant="outline" onClick={onCancel}>
+            Close
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
