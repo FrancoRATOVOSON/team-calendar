@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -13,31 +11,21 @@ import React from "react";
 import { useActionData } from "@/lib/hooks";
 import { createUserEvent } from "@/services";
 import { toast } from "sonner";
-import { ActionButton } from "@/components/common";
-import { EventForm, useEventForm } from "./event-form";
+import { EventForm } from "./event-form";
+import { EventType } from "@/lib/types";
 
 interface CreateEventProps {
-  onEventCreated?: () => void
+  onEventCreated?: () => void;
 }
 
 export default function CreateEvent({ onEventCreated }: CreateEventProps) {
   const [open, setopen] = React.useState(false);
-  const eventValues = useEventForm()
-
-  const handleCreateEvent = React.useCallback(() => {
-    const { title, description, date } = eventValues;
-    return createUserEvent({
-      title: title.value,
-      description: description.value,
-      ...date.value
-    });
-  }, [eventValues]);
 
   const { pending, handleAction } = useActionData({
-    actionFn: handleCreateEvent,
+    actionFn: (inputs: Omit<EventType, "id">) => createUserEvent(inputs),
     onSucceed: () => {
-      toast("Event created successfully")
-      onEventCreated?.()
+      toast("Event created successfully");
+      onEventCreated?.();
     },
     onError: () => toast("An error occured when creating your event"),
     onFinally: () => setopen(false)
@@ -55,23 +43,11 @@ export default function CreateEvent({ onEventCreated }: CreateEventProps) {
         <DialogHeader>
           <DialogTitle>Create a new event</DialogTitle>
         </DialogHeader>
-        <EventForm values={eventValues} />
-        <DialogFooter className="mt-4">
-          <ActionButton
-            pending={pending}
-            onClick={handleAction}
-            label={isPending => isPending ? 'Creating...' : 'Create'}
-          />
-          <DialogClose asChild>
-            <Button
-              variant={'outline'}
-              onClick={() => setopen(false)}
-              disabled={pending}
-            >
-              Cancel
-            </Button>
-          </DialogClose>
-        </DialogFooter>
+        <EventForm
+          pending={pending}
+          onCreate={handleAction}
+          onCancel={() => setopen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

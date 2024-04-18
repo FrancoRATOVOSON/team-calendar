@@ -1,10 +1,7 @@
 import { EventInputType, EventType } from "@/lib/types";
-import { EventForm, useEventForm } from "./event-form";
+import { EventForm } from "./event-form";
 import { Dialog } from "@headlessui/react";
-import { ActionButton } from "@/components/common";
 import { useActionData } from "@/lib/hooks";
-import { Button } from "@/components/ui/button";
-import { isEqual } from "date-fns";
 import { deleteEvent, updateEvent } from "@/services";
 import { toast } from "sonner";
 
@@ -21,26 +18,8 @@ export default function EventDialog({
   closeModal,
   reload
 }: EventDialogProps) {
-  const { title, description, date } = useEventForm(event);
   const { pending: updatePending, handleAction: onUpdate } = useActionData({
-    actionFn: () => {
-      const inputs: EventInputType = {
-        title: title.value === event.title ? undefined : title.value,
-        description:
-          description.value === event.description
-            ? undefined
-            : description.value,
-        start: isEqual(date.value.start, event.start)
-          ? undefined
-          : date.value.start,
-        end:
-          (!event.end && !date.value.end) ||
-          (event.end && date.value.end && isEqual(event.end, date.value.end))
-            ? undefined
-            : date.value.end
-      };
-      return updateEvent(event.id, inputs);
-    },
+    actionFn: (inputs: EventInputType) => updateEvent(event.id, inputs),
     onSucceed: () => {
       closeModal();
       toast("Updated!");
@@ -59,27 +38,20 @@ export default function EventDialog({
   });
 
   return (
-    <Dialog open={open} onClose={closeModal}>
-      <Dialog.Panel>
-        <Dialog.Title>Event</Dialog.Title>
-        <EventForm values={{ title, description, date }} />
-        <div>
-          <ActionButton
-            label={(isPending) => (isPending ? "Saving..." : "Save")}
-            onClick={onUpdate}
-            pending={updatePending}
+    <Dialog open={open} onClose={closeModal} className="relative z-50">
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+        <Dialog.Panel className="w-full max-w-sm rounded-2xl bg-white p-10 space-y-6">
+          <Dialog.Title className="text-3xl font-semibold">Event</Dialog.Title>
+          <EventForm
+            pending={deletePending || updatePending}
+            initialValues={event}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+            onCancel={closeModal}
           />
-          <ActionButton
-            label={(isPending) => (isPending ? "Deleting..." : "Delete")}
-            variant="destructive"
-            onClick={onDelete}
-            pending={deletePending}
-          />
-          <Button variant="outline" onClick={closeModal}>
-            Close
-          </Button>
-        </div>
-      </Dialog.Panel>
+        </Dialog.Panel>
+      </div>
     </Dialog>
   );
 }

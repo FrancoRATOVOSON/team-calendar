@@ -14,16 +14,16 @@ import {
 interface DateRangePickerProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   onChange: (params: { start: Date; end?: Date }) => void;
-  values?: {
+  value?: {
     start: Date;
-    end?: Date;
+    end?: Date | undefined;
   };
 }
 
 export function DateRangePicker({
   className,
   onChange,
-  values
+  value
 }: DateRangePickerProps) {
   return (
     <div className={cn("grid gap-2", className)}>
@@ -34,18 +34,18 @@ export function DateRangePicker({
             variant={"outline"}
             className={cn(
               "w-[300px] justify-start text-left font-normal",
-              !values && "text-muted-foreground"
+              !value && "text-muted-foreground"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {values?.start ? (
-              values.end ? (
+            {value?.start ? (
+              value.end ? (
                 <>
-                  {format(values.start, "LLL dd, y")} -{" "}
-                  {format(values.end, "LLL dd, y")}
+                  {format(value.start, "LLL dd, y")} -{" "}
+                  {format(value.end, "LLL dd, y")}
                 </>
               ) : (
-                format(values.start, "LLL dd, y")
+                format(value.start, "LLL dd, y")
               )
             ) : (
               <span>Pick a date</span>
@@ -56,13 +56,13 @@ export function DateRangePicker({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={values?.start}
-            selected={{ from: values?.start, to: values?.end }}
-            onSelect={(value) => {
-              if (value && value.from)
+            defaultMonth={value?.start}
+            selected={{ from: value?.start, to: value?.end }}
+            onSelect={(values) => {
+              if (values && values.from)
                 onChange({
-                  start: value.from,
-                  end: value.to
+                  start: values.from,
+                  end: values.to
                 });
             }}
             numberOfMonths={2}

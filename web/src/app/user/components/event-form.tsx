@@ -88,6 +88,11 @@ export function EventForm({
 }: EventFormProps) {
   const form = useForm<Omit<EventFormType, "id">>({
     defaultValues: initialValues
+      ? {
+          ...initialValues,
+          date: { start: initialValues.start, end: initialValues.end }
+        }
+      : undefined
   });
 
   const handleCreate = React.useCallback(() => {
@@ -119,13 +124,13 @@ export function EventForm({
 
   return (
     <Form {...form}>
-      <form className={cn("space-y-4", className)}>
-        <div>
+      <form className={cn("space-y-6", className)}>
+        <div className="space-y-4">
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-0">
                 <FormLabel>Title</FormLabel>
                 <FormControl>
                   <Input {...field} />
@@ -137,7 +142,7 @@ export function EventForm({
             control={form.control}
             name="description"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-0">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea placeholder="Additionnal note..." {...field} />
@@ -148,8 +153,9 @@ export function EventForm({
           <FormField
             control={form.control}
             name="date"
-            render={({ field }) => (
-              <FormItem>
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            render={({ field: {ref:_, ...field} }) => (
+              <FormItem className="space-y-0">
                 <FormLabel>Starting and ending date</FormLabel>
                 <FormControl>
                   <DateRangePicker {...field} />
@@ -158,7 +164,7 @@ export function EventForm({
             )}
           />
         </div>
-        <div>
+        <div className="flex justify-start items-center gap-2">
           {onCreate && (
             <ActionButton
               pending={pending}
