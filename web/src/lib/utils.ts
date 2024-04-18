@@ -7,6 +7,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function getAPIHeader(){
+  const token = localStorage.getItem(CONFIG.token_key)
+
+  return {
+    headers: {
+    Authorization: `Bearer ${token || ''}`
+  }
+  }
+}
+
 export const api = axios.create({
   baseURL: CONFIG.base_url,
   headers: {

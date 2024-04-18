@@ -14,6 +14,7 @@ import { useActionData } from "@/lib/hooks";
 import { authUser } from "@/services/auth";
 import { useNavigate } from "@/router";
 import { toast } from "sonner";
+import CONFIG from "@/lib/config";
 
 export function LoginForm() {
   const [email, setemail] = React.useState("");
@@ -22,7 +23,7 @@ export function LoginForm() {
   const { pending, handleAction } = useActionData({
     actionFn: () => authUser(email, password),
     onSucceed: (params) => {
-      localStorage.setItem("token", params.token);
+      localStorage.setItem(CONFIG.token_key, params.token);
       if (params.role === "admin") navigate("/admin");
       else navigate("/user");
     },
