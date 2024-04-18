@@ -12,6 +12,7 @@ import { getUserEvents } from "@/services";
 import { CreateEvent, EventDialog } from "./components";
 import { toast } from "sonner";
 import { EventType } from "@/lib/types";
+import { LogOutButton } from "@/components/common";
 
 const locales = {
   be: be
@@ -30,8 +31,10 @@ const ColoredDateCellWrapper = ({ children }: React.PropsWithChildren) => (
 );
 
 export default function UserPage() {
-  const [modalOpen,setModalOpen] = React.useState(false)
-  const [selectedEvent,setSelectedEvent] = React.useState<EventType|undefined>()
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [selectedEvent, setSelectedEvent] = React.useState<
+    EventType | undefined
+  >();
   const { data, loading, error, reloadData } = useLoadData(getUserEvents);
   const { components, defaultDate, views } = React.useMemo(
     () => ({
@@ -50,8 +53,11 @@ export default function UserPage() {
   }, [loading, error]);
 
   return (
-    <div className="min-h-screen p-6 space-y-2">
-      <CreateEvent onEventCreated={reloadData} />
+    <div className="min-h-screen space-y-2">
+      <div className="flex justify-start items-center gap-2">
+        <LogOutButton />
+        <CreateEvent onEventCreated={reloadData} />
+      </div>
       <div className="w-full h-screen">
         <Calendar
           localizer={localizer}
@@ -60,12 +66,19 @@ export default function UserPage() {
           views={views}
           events={data}
           onSelectEvent={(event) => {
-            setSelectedEvent(event)
-            setModalOpen(true)
+            setSelectedEvent(event);
+            setModalOpen(true);
           }}
         />
       </div>
-      {selectedEvent && <EventDialog open={modalOpen} closeModal={() => setModalOpen(false)} event={selectedEvent} reload={reloadData} />}
+      {selectedEvent && (
+        <EventDialog
+          open={modalOpen}
+          closeModal={() => setModalOpen(false)}
+          event={selectedEvent}
+          reload={reloadData}
+        />
+      )}
     </div>
   );
 }

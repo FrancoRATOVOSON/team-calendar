@@ -83,6 +83,6 @@ export const handlers: Array<RequestHandler> = [
   }),
 
   http.post(`${CONFIG.base_url}/login`, () => {
-    return HttpResponse.json({ token: "sample_token", role: "admin" });
+    return HttpResponse.json({ token: "sample_token", role: "uwer" });
   })
 ];
